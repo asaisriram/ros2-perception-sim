@@ -23,8 +23,7 @@ setup(
         ],
     },
     entry_points={
-        'console_scripts': ['counter_publisher = fake_sensors.counter_publisher:main',
-                            'counter_subscriber = fake_sensors.counter_subscriber:main',
-                            ],
+        'console_scripts': [ 'counter_publisher = fake_sensors.counter_publisher:main',
+        ],
     },
 )
