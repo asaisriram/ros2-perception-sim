@@ -1,0 +1,11 @@
+name: CI
+
+on: push
+
+jobs:
+  basic_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify workflow runs
+        run: echo "CI workflow triggered successfully"
