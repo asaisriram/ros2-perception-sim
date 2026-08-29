@@ -14,8 +14,12 @@ jobs:
         with:
           required-ros-distributions: jazzy 
 
-      - name: Colcon build and test
+      - name: Colcon build
         run: |
           source /opt/ros/jazzy/setup.bash
           colcon build --packages-select fake_sensors
+
+      - name: Colcon test
+        run: |
           colcon test --packages-select fake_sensors
+          colcon test-result --verbose

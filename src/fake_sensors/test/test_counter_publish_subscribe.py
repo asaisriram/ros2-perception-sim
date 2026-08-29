@@ -14,7 +14,7 @@ from std_msgs.msg import Bool, Int32
 @pytest.fixture(scope='session', autouse=True)
 def set_ros_domain_id():
     """Set the ROS domain used by the test session."""
-    os.environ['ROS_DOMAIN_ID'] = '77'
+    os.environ['SROS_DOMAIN_ID'] = '77'
     yield
 
 
@@ -26,7 +26,7 @@ def ros_context():
     rclpy.shutdown()
 
 
-class TestnodeSubscriber(Node):
+class SubscriberTestNode(Node):
     """Test node created for subscription."""
 
     def __init__(self, topic_name, msg_type):
@@ -75,7 +75,7 @@ def test_publish_warning(ros_context, value, threshold, expected):
     """Verify that the subscriber publishes warning."""
     msg = Int32()
     node_subscriber_ = CounterSubscriber()
-    testnode_subscriber_ = TestnodeSubscriber('/status/warning', Bool)
+    testnode_subscriber_ = SubscriberTestNode('/status/warning', Bool)
     node_subscriber_.threshold = threshold
     msg.data = value
     node_subscriber_.listener_callback(msg)

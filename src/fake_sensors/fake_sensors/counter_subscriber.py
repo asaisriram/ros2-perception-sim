@@ -1,5 +1,6 @@
 """Subscribe to and record counter messages from a ROS 2 topic."""
 
+
 from fake_sensors.threshold_logic import is_outside_threshold
 
 import rclpy

@@ -1,5 +1,7 @@
 # ros2-perception-sim
 
+[![CI](https://github.com/asaisriram/ros2-perception-sim/actions/workflows/ci.yml/badge.svg)](https://github.com/asaisriram/ros2-perception-sim/actions/workflows/ci.yml)
+
 A ROS 2 (Jazzy) project focused on sensor perception, fusion, closed-loop control, and simulation — built with an emphasis on testing: fault injection, requirements traceability, and CI on every change.
 
 ---
