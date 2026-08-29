@@ -1,4 +1,5 @@
-"""Publish an incrementing counter on a ROS 2 topic."""
+"""Publish messages to a ROS 2 topic."""
+
 
 import rclpy
 from rclpy.node import Node
@@ -6,7 +7,7 @@ from std_msgs.msg import Int32
 
 
 class CounterPublisher(Node):
-    """Publish counter messages at a fixed interval."""
+    """Node publishing counter messages to the topic."""
 
     def __init__(self):
         """Initialize the counter publisher node."""
@@ -16,7 +17,7 @@ class CounterPublisher(Node):
         self.timer = self.create_timer(0.1, self.timer_callback)
 
     def timer_callback(self):
-        """Publish the current counter value and increment it."""
+        """Timer callback function to increment and send counter message."""
         msg = Int32()
         msg.data = self.counter
         self.publisher_.publish(msg)
