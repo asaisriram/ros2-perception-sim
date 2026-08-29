@@ -13,4 +13,4 @@ jobs:
       - name: ROS2 availability check
         run: |
           source /opt/ros/jazzy/setup.bash
-          ros2 --version
+          ros2 pkg list
