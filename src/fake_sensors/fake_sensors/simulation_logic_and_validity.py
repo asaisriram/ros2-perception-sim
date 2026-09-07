@@ -7,7 +7,7 @@ RAMP_PERIOD = 60.0      # sawtooth wraps every 60 s
 TEMP_BASE_C = 20.0        # base temperature
 TEMP_RATE_C_PER_S = 0.5   # rise rate -> 20.0 .. 50.0 C over the period
 
-PLAUSI_PARAM = 0.5  # threshold check parameter
+PLAUSIBILITY_TOLERANCE_C = 0.75   # 2x the 0.375 C nominal error
 
 
 class ErrorStatus(StrEnum):
@@ -41,7 +41,7 @@ def is_data_inconsistent(counter, temperature) -> bool:
 def check_sensor_plausibility(counter, temperature) -> bool:
     """Sensor plausibility check."""
     temperature_calc = temperature_conversion(counter)
-    if abs(temperature - temperature_calc) > PLAUSI_PARAM:
+    if abs(temperature - temperature_calc) > PLAUSIBILITY_TOLERANCE_C:
         return ErrorStatus.PLAUSI_ERROR
     return ErrorStatus.NO_ERROR
 

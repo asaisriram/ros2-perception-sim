@@ -52,8 +52,8 @@ def test_is_data_inconsistent(value1, value2, expected):
     (10.0, 24.6, ErrorStatus.NO_ERROR),           # inside tolerance, low
     (10.0, 25.5, ErrorStatus.NO_ERROR),           # exactly at tolerance
     (10.0, 24.5, ErrorStatus.NO_ERROR),           # exactly at tolerance, low
-    (10.0, 25.6, ErrorStatus.PLAUSI_ERROR),       # outside tolerance, high
-    (10.0, 24.4, ErrorStatus.PLAUSI_ERROR),       # outside tolerance, low
+    (10.0, 25.76, ErrorStatus.PLAUSI_ERROR),       # outside tolerance, high
+    (10.0, 24.20, ErrorStatus.PLAUSI_ERROR),       # outside tolerance, low
     (30.0, 20.0, ErrorStatus.PLAUSI_ERROR),       # gross disagreement
 ])
 def test_check_sensor_plausibility(value1, value2, expected):

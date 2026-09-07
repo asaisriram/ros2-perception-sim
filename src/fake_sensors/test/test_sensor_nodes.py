@@ -9,9 +9,9 @@ from fake_sensors.temperature_publisher import TemperaturePublisher
 import pytest
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import qos_profile_sensor_data
+from rclpy.qos import qos_profile_sensor_data, qos_profile_services_default
 from sensor_msgs.msg import Temperature
-from std_msgs.msg import Float32
+from std_msgs.msg import Bool, Float32
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -79,6 +79,21 @@ def test_temperature_publisher_publishes(ros_context):
     assert received is not None
 
 
+def test_temperature_publisher_qos_profile(ros_context):
+    """Verify the qos profile mismatch between subscriber and publisher."""
+    count = 5
+    node_publisher = TemperaturePublisher()
+    subscriber_testnode = SubscriberTestNode(
+        '/fake/temperature', Temperature, qos_profile_services_default)
+    for _ in range(count):
+        rclpy.spin_once(node_publisher, timeout_sec=0.2)
+        rclpy.spin_once(subscriber_testnode, timeout_sec=0.2)
+    received = subscriber_testnode.msg_data
+    node_publisher.destroy_node()
+    subscriber_testnode.destroy_node()
+    assert received is None
+
+
 def test_sensor_monitor_subscribes(ros_context):
     """Verify the monitor records data from both sensor topics."""
     count = 10
@@ -96,3 +111,28 @@ def test_sensor_monitor_subscribes(ros_context):
     sensor_monitor.destroy_node()
     assert last_counter is not None
     assert last_temperature is not None
+
+
+@pytest.mark.parametrize('value1, value2, threshold, expected', [
+    (10.0, 25.0, 55.0, False),   # 20+0.5*10=25.0 -> Plausible, under threshold
+    (10.0, 25.8, 55.0, True),    # abs(25.0-25.6) > 0.5 -> PLAUSI_ERROR
+    (42.5, 41.25, 40.0, True),   # 42.5 > 40.0 -> THRESHOLD_ERROR
+])
+def test_sensor_monitor_publishes(ros_context, value1, value2, threshold, expected):
+    """Verify the sensor monitor publishes error states."""
+    count = 5
+    sensor_monitor = SensorMonitor()
+    warning_subscriber = SubscriberTestNode('/status/warning', Bool)
+    counter_msg = Float32()
+    counter_msg.data = value1
+    temperature_msg = Temperature()
+    temperature_msg.temperature = value2
+    sensor_monitor.threshold = threshold
+    sensor_monitor.counter_callback(counter_msg)
+    sensor_monitor.temperature_callback(temperature_msg)
+    for _ in range(count):
+        rclpy.spin_once(warning_subscriber, timeout_sec=0.2)
+    warning_status = warning_subscriber.msg_data
+    sensor_monitor.destroy_node()
+    warning_subscriber.destroy_node()
+    assert warning_status == expected
