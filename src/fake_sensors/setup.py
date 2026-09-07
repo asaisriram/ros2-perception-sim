@@ -24,7 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': ['counter_publisher = fake_sensors.counter_publisher:main',
-                            'counter_subscriber = fake_sensors.counter_subscriber:main',
+                            'sensor_monitor = fake_sensors.sensor_monitor:main',
+                            'temperature_publisher = fake_sensors.temperature_publisher:main',
                             ],
     },
 )
